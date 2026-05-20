@@ -7,28 +7,7 @@
       <boolProp name="TestPlan.tearDown_on_shutdown">true</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Variables" enabled="true">
-        <collectionProp name="Arguments.arguments">
-          <elementProp name="BASE_URL" elementType="Argument">
-            <stringProp name="Argument.name">BASE_URL</stringProp>
-            <stringProp name="Argument.value">${__P(BASE_URL,http://localhost:8000)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="USERS" elementType="Argument">
-            <stringProp name="Argument.name">USERS</stringProp>
-            <stringProp name="Argument.value">${__P(USERS,25)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="RAMP_UP" elementType="Argument">
-            <stringProp name="Argument.name">RAMP_UP</stringProp>
-            <stringProp name="Argument.value">${__P(RAMP_UP,30)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="DURATION" elementType="Argument">
-            <stringProp name="Argument.name">DURATION</stringProp>
-            <stringProp name="Argument.value">${__P(DURATION,120)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-        </collectionProp>
+        <collectionProp name="Arguments.arguments"/>
       </elementProp>
     </TestPlan>
     <hashTree>
@@ -38,46 +17,54 @@
           <boolProp name="LoopController.continue_forever">true</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${USERS}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${RAMP_UP}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(USERS,25)}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(RAMP_UP,30)}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${DURATION}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(DURATION,120)}</stringProp>
         <stringProp name="ThreadGroup.delay">0</stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
+        <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="JSON headers" enabled="true">
+          <collectionProp name="HeaderManager.headers">
+            <elementProp name="" elementType="Header">
+              <stringProp name="Header.name">Content-Type</stringProp>
+              <stringProp name="Header.value">application/json</stringProp>
+            </elementProp>
+          </collectionProp>
+        </HeaderManager>
+        <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="POST token" enabled="true">
-          <stringProp name="HTTPSampler.domain"></stringProp>
-          <stringProp name="HTTPSampler.port"></stringProp>
-          <stringProp name="HTTPSampler.protocol"></stringProp>
-          <stringProp name="HTTPSampler.path">${BASE_URL}/api/token/</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Body" enabled="true">
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{"email":"admin@covagro.local","password":"Admin123*"}</stringProp>
+                <stringProp name="Argument.value">{&quot;email&quot;:&quot;admin@covagro.local&quot;,&quot;password&quot;:&quot;Admin123*&quot;}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
+                <boolProp name="HTTPArgument.use_equals">true</boolProp>
               </elementProp>
             </collectionProp>
           </elementProp>
+          <stringProp name="HTTPSampler.domain">${__P(HOST,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(PORT,8000)}</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/api/token/</stringProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
         </HTTPSamplerProxy>
         <hashTree>
-          <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="JSON headers" enabled="true">
-            <collectionProp name="HeaderManager.headers">
-              <elementProp name="" elementType="Header">
-                <stringProp name="Header.name">Content-Type</stringProp>
-                <stringProp name="Header.value">application/json</stringProp>
-              </elementProp>
-            </collectionProp>
-          </HeaderManager>
-          <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="Extraer access token" enabled="true">
-            <stringProp name="JSONPostProcessor.referenceNames">access_token</stringProp>
-            <stringProp name="JSONPostProcessor.jsonPathExprs">$.access</stringProp>
-            <stringProp name="JSONPostProcessor.match_numbers">1</stringProp>
-          </JSONPostProcessor>
+          <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extraer access token" enabled="true">
+            <stringProp name="RegexExtractor.useHeaders">false</stringProp>
+            <stringProp name="RegexExtractor.refname">access_token</stringProp>
+            <stringProp name="RegexExtractor.regex">&quot;access&quot;\s*:\s*&quot;([^&quot;]+)&quot;</stringProp>
+            <stringProp name="RegexExtractor.template">$1$</stringProp>
+            <stringProp name="RegexExtractor.default"></stringProp>
+            <stringProp name="RegexExtractor.match_number">1</stringProp>
+          </RegexExtractor>
+          <hashTree/>
         </hashTree>
         <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="Auth header" enabled="true">
           <collectionProp name="HeaderManager.headers">
@@ -89,20 +76,44 @@
         </HeaderManager>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET productos" enabled="true">
-          <stringProp name="HTTPSampler.path">${BASE_URL}/api/productos/</stringProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Params" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${__P(HOST,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(PORT,8000)}</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/api/productos/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET pedidos" enabled="true">
-          <stringProp name="HTTPSampler.path">${BASE_URL}/api/pedidos/</stringProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Params" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${__P(HOST,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(PORT,8000)}</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/api/pedidos/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
         </HTTPSamplerProxy>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="GET stock bajo" enabled="true">
-          <stringProp name="HTTPSampler.path">${BASE_URL}/api/productos/stock-bajo/</stringProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" testname="Params" enabled="true">
+            <collectionProp name="Arguments.arguments"/>
+          </elementProp>
+          <stringProp name="HTTPSampler.domain">${__P(HOST,localhost)}</stringProp>
+          <stringProp name="HTTPSampler.port">${__P(PORT,8000)}</stringProp>
+          <stringProp name="HTTPSampler.protocol">http</stringProp>
+          <stringProp name="HTTPSampler.path">/api/productos/stock-bajo/</stringProp>
           <stringProp name="HTTPSampler.method">GET</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
           <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
         </HTTPSamplerProxy>
         <hashTree/>

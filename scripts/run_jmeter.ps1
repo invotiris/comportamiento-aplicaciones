@@ -1,5 +1,6 @@
 param(
-  [string]$BaseUrl = "http://localhost:8000",
+  [string]$HostName = "localhost",
+  [int]$Port = 8000,
   [int]$Users = 25,
   [int]$RampUp = 30,
   [int]$Duration = 120,
@@ -17,7 +18,8 @@ jmeter -n `
   -t (Join-Path $PSScriptRoot "..\jmeter\covagro-load-test.jmx") `
   -l (Join-Path $outDir "samples.jtl") `
   -e -o (Join-Path $outDir "dashboard") `
-  -JBASE_URL=$BaseUrl `
+  -JHOST=$HostName `
+  -JPORT=$Port `
   -JUSERS=$Users `
   -JRAMP_UP=$RampUp `
   -JDURATION=$Duration
