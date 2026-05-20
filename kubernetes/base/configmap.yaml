@@ -5,7 +5,7 @@ metadata:
   namespace: covagro
 data:
   DEBUG: "False"
-  ALLOWED_HOSTS: "localhost,127.0.0.1,backend,backend.covagro.svc.cluster.local"
+  ALLOWED_HOSTS: "*"
   CORS_ALLOWED_ORIGINS: "http://localhost:30080,http://127.0.0.1:30080"
   POSTGRES_DB: covagro
   POSTGRES_USER: covagro
