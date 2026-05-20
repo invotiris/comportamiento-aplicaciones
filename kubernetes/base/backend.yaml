@@ -45,10 +45,3 @@ spec:
               port: 8000
             initialDelaySeconds: 20
             periodSeconds: 10
-          resources:
-            requests:
-              cpu: 75m
-              memory: 128Mi
-            limits:
-              cpu: 500m
-              memory: 512Mi
