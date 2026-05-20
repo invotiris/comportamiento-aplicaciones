@@ -1,0 +1,11 @@
+scenario,nodes,replicas,users,avg_response_ms,throughput_req_s,error_pct,p95_response_ms,notes
+docker-compose,1,1,25,,,,,
+k8s-1-node,1,1,25,,,,,
+k8s-1-node,1,2,25,,,,,
+k8s-1-node,1,3,25,,,,,
+k8s-2-nodes,2,1,25,,,,,
+k8s-2-nodes,2,2,25,,,,,
+k8s-2-nodes,2,3,25,,,,,
+k8s-3-nodes,3,1,25,,,,,
+k8s-3-nodes,3,2,25,,,,,
+k8s-3-nodes,3,3,25,,,,,

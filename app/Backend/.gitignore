@@ -1,0 +1,21 @@
+# Django sensitive files
+.env
+db.sqlite3
+db.sqlite3-journal
+*.log
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+populate_test_data.py
+
+# Media and static
+media/
+staticfiles/
+
+# Private keys (if any)
+*.key
+*.pem
