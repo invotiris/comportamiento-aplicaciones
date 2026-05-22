@@ -1,4 +1,5 @@
 from rest_framework import viewsets, status, permissions
+from django.core.paginator import Paginator
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db import transaction
@@ -50,6 +51,27 @@ class PedidoViewSet(viewsets.ModelViewSet):
             return queryset.filter(id_cliente=user)
         return queryset
 
+    def list(self, request, *args, **kwargs):
+        page_size = request.query_params.get('page_size')
+        if not page_size:
+            return super().list(request, *args, **kwargs)
+
+        try:
+            page_size = max(1, min(int(page_size), 100))
+        except ValueError:
+            page_size = 50
+
+        queryset = self.filter_queryset(self.get_queryset().order_by('-fecha'))
+        paginator = Paginator(queryset, page_size)
+        page_obj = paginator.get_page(request.query_params.get('page', 1))
+        serializer = self.get_serializer(page_obj.object_list, many=True)
+        return Response({
+            'count': paginator.count,
+            'page': page_obj.number,
+            'pages': paginator.num_pages,
+            'results': serializer.data,
+        })
+
     # Endpoint extra: inactivar pedido
     @action(detail=True, methods=['patch'], url_path='inactivar')
     def inactivar(self, request, pk=None):
@@ -78,8 +100,6 @@ class PedidoViewSet(viewsets.ModelViewSet):
     @method_decorator(cache_page(60 * 5))
     @action(detail=False, methods=['get'], url_path='reporte-consolidado', permission_classes=[EsEmpleadoOAdmin])
     def reporte_consolidado(self, request):
-        from django.core.paginator import Paginator
-        
         periodo = request.query_params.get('periodo', 'diario')
         hoy = timezone.now()
         
