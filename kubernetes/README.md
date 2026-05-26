@@ -16,12 +16,6 @@ Dos nodos:
 kind create cluster --name covagro-2n --config kubernetes/kind/two-nodes.yaml
 ```
 
-Tres nodos:
-
-```bash
-kind create cluster --name covagro-3n --config kubernetes/kind/three-nodes.yaml
-```
-
 ## Construir y cargar imagenes
 
 ```bash
@@ -31,7 +25,7 @@ kind load docker-image covagro-backend:local --name covagro-1n
 kind load docker-image covagro-frontend:local --name covagro-1n
 ```
 
-Cambia `covagro-1n` por `covagro-2n` o `covagro-3n` segun el escenario.
+Cambia `covagro-1n` por `covagro-2n` segun el escenario.
 
 ## Desplegar
 

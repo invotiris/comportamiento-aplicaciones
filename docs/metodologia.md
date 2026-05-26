@@ -9,7 +9,6 @@ Covagro SII es una aplicacion con backend Django REST, frontend React/Vite y per
 1. Docker Compose en una maquina: PostgreSQL, backend y frontend.
 2. Kubernetes con un nodo: backend con 1, 2 y 3 replicas.
 3. Kubernetes con dos nodos: backend con 1, 2 y 3 replicas.
-4. Kubernetes con tres nodos: backend con 1, 2 y 3 replicas.
 
 ## Cargas
 
