@@ -1,11 +1,5 @@
 # Ejecucion en la maquina virtual
 
-Conectarse:
-
-```bash
-ssh student1@IP_DE_LA_VM
-```
-
 Instalar herramientas si no existen:
 
 ```bash
